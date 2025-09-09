@@ -1,0 +1,202 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+  color: #222;
+}
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 12px;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card {
+  min-height: 100%;
+}
+.page-wrapper {
+  transition: padding-top 0.3s ease-in-out; /* animasi halus */
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.product-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+.editprofile{
+  margin-top: 120px;
+}
+
+.product-price {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e63946;
+  margin: 5px 0;
+}
+
+button {
+  font-size: 14px;
+  font-weight: 500;
+}
+  .btn-paymentm{
+    display:none;
+  }
+
+:root {
+  --bs-primary: #212529;
+}
+
+.form-check-input:checked {
+  background-color: #212529 !important;
+  border-color: #212529 !important;
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: #212529 !important;
+}
+.form-range::-moz-range-thumb {
+  background-color: #212529 !important;
+}
+.form-range::-ms-thumb {
+  background-color: #212529 !important;
+}
+.productdetail{
+  margin-top: 80px;
+}
+
+@media (max-width: 576px) {
+  body {
+  padding-top: auto;
+}
+
+  .btn-sm-mobile {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.5rem;
+  }
+  .btn-paymentd{
+    display: none;
+  }
+  .btn-paymentm{
+    display:block;
+  }
+  .table td:last-child {
+  white-space: nowrap;
+}
+.action-btn {
+    padding: 4px 6px;
+    font-size: 13px;
+  }
+  .ordertext{
+    font-size: 13px;
+  }
+  .btn-detail{
+    font-size: 13px;
+  }
+  .sidebar{
+    margin-top: -25px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar .form-control {
+    width: 100% !important;
+    margin-top: 10px;
+  }
+
+  .navbar .d-flex.align-items-center.gap-2 {
+    gap: 8px;
+  }
+
+  .navbar .btn {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+  }
+
+  .navbar .badge {
+    font-size: 0.65rem;
+    padding: 4px 6px;
+  }
+
+  .navbar-toggler {
+    margin-left: auto;
+  }
+}
+@media (max-width: 576px) {
+ .logout-btn {
+  border-radius: 0 !important;
+  border: none !important;
+  padding: 6px 16px;
+  font-weight: 500;
+  color: #fff !important;
+}
+.logout-btn:hover {
+  background-color: none;
+  color: #fff !important;
+}
+.order-summary {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+/* Tombol sidebar mobile */
+.sidebar-toggle-btn {
+  border-radius: 100%;
+  margin-left: 10px;
+  width: 60px;
+  height: 60px;
+  background-color: #000;
+  border: none;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.6s ease, background-color 0.3s ease;
+  color: #fff;
+}
+/* Hover effect: lebih gelap */
+.sidebar-toggle-btn:hover {
+  background-color: #111; /* warna lebih gelap */
+}
+
+/* Keyframe rotate 360° */
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Class aktif saat diklik */
+.sidebar-toggle-btn.active {
+  animation: rotate360 0.6s ease forwards;
+}
+
+
+
+}
+@media (max-width: 776px) {
+  .productmobile{
+  margin-top: 150px;
+}
+.productdetail{
+  margin-top: 100px;
+}
+.title-sidebar{
+  padding-left: 15px;
+}
+}
