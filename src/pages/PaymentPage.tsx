@@ -68,8 +68,8 @@ const handleCopy = () => {
   }
 
   return (
-    <Container className="mt-2">
-      <h3>Payment</h3>
+    <Container className="mt-2 ">
+      <h3 className="paymentmargin">Payment</h3>
       <p>Total Items: {pendingOrder.items?.length || 0}</p>
       <p>Total Price: ${pendingOrder.total?.toFixed(2) || 0}</p>
 

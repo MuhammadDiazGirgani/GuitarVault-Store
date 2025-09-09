@@ -77,6 +77,18 @@ button {
 .productdetail{
   margin-top: 80px;
 }
+.mobilemargin{
+  margin-top: 90px;
+}
+.paymentmargin{
+  margin-top: 80px;
+}
+.ordermargin{
+  margin-top: 90px;
+}
+.container{
+  margin-top: 200px;
+}
 
 @media (max-width: 576px) {
   body {
@@ -191,12 +203,24 @@ button {
 }
 @media (max-width: 776px) {
   .productmobile{
-  margin-top: 150px;
+  margin-top: 120px;
+}
+.mobilemargin{
+  margin-top: 120px;
 }
 .productdetail{
   margin-top: 100px;
 }
 .title-sidebar{
   padding-left: 15px;
+}
+.paymentmargin{
+  margin-top: 130px;
+}
+.container{
+  margin-top: 130px;
+}
+.ordermargin{
+  margin-top: 10px;
 }
 }

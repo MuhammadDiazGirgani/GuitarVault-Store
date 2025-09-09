@@ -45,9 +45,9 @@ export default function OrdersPage() {
   }
 
   return (
-    <Container className="mt-2 mb-4">
+    <Container className="container">
       {orders.map((order, idx) => (
-        <Card key={idx} className="mb-3 p-3">
+        <Card key={idx} className=" p-3 mb-4 margin">
           <Row>
             <Col>
               <p><strong>Date:</strong> {new Date(order.date).toLocaleString()}</p>
@@ -76,7 +76,7 @@ export default function OrdersPage() {
           </Row>
         </Card>
       ))}
-      <div className="mt-4">
+      <div className="mt-5">
         <Button variant="outline-dark" onClick={() => navigate("/dashboard")}>
           ← Back to Shop
         </Button>

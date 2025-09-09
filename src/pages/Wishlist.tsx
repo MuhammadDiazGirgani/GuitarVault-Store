@@ -105,7 +105,7 @@ export default function Wishlist() {
 
   return (
     <Container className="mt-4">
-      <h2 className="mb-4">❤️ Your Wishlist</h2>
+      <h2 className="mb-4 mobilemargin">❤️ Your Wishlist</h2>
 
       {wishlistItems.length === 0 ? (
         <>

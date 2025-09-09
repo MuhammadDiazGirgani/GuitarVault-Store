@@ -106,7 +106,7 @@ const handleProceedToPayment = () => {
 
   if (cartItems.length === 0) {
     return (
-      <Container className="mt-4">
+      <Container className="mt-4 ">
         <Alert variant="info">Your cart is empty</Alert>
         <Button variant="dark" onClick={() => navigate("/dashboard")}>
           ← Back to Shop
@@ -116,10 +116,10 @@ const handleProceedToPayment = () => {
   }
 
   return (
-    <Container className="mt-2 mb-5">
+    <Container className="mt-2 mb-5 ">
       <Row>
         <Col md={6}>
-          <h3>Checkout</h3>
+          <h3 className="mobilemargin">Checkout</h3>
           {user ? (
             <div className="mb-3">
               <p><strong>Name:</strong> {user.name}</p>
@@ -139,10 +139,10 @@ const handleProceedToPayment = () => {
         </Col>
 
         <Col md={6}>
-          <h3>Order Summary</h3>
+          <h3 className="ordermargin">Order Summary</h3>
           <div className="order-summary">
             {cartItems.map((item) => (
-              <Card key={item.id} className="mb-2 p-2">
+              <Card key={item.id} className="mb-2 p-1">
                 <Row>
                   <Col xs={3}>
                     <img

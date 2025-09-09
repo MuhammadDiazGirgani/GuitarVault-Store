@@ -118,7 +118,7 @@ const totalPrice = cartItems.reduce(
 
   return (
     <Container className="mt-4 mb-4">
-      <h2 className="mb-4">🛒 Your Cart</h2>
+      <h2 className="mb-4 mobilemargin">🛒 Your Cart</h2>
       {cartItems.length === 0 ? (
         <Alert variant="info">Cart is empty</Alert>
       ) : (
