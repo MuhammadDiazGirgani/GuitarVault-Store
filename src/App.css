@@ -92,6 +92,12 @@ button {
 .shadow-lg{
   margin-top: -200px;
 }
+.footer{
+  margin-top: -150px;
+}
+.medsos{
+  margin-top: -150px;
+}
 
 @media (max-width: 576px) {
   body {
@@ -225,5 +231,12 @@ button {
 }
 .ordermargin{
   margin-top: 10px;
+}
+.footer{
+  margin-top: -100px;
+}
+.medsos{
+  margin-top: 20px;
+  margin-bottom: 50px;
 }
 }

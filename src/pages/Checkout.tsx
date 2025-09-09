@@ -119,7 +119,7 @@ const handleProceedToPayment = () => {
     <Container className="mt-2 mb-5 ">
       <Row>
         <Col md={6}>
-          <h3 className="mobilemargin">Checkout</h3>
+          <h3 className="mobilemargin"></h3>
           {user ? (
             <div className="mb-3">
               <p><strong>Name:</strong> {user.name}</p>

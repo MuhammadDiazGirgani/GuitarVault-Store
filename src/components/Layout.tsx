@@ -1,4 +1,3 @@
-// src/components/Layout.tsx
 import { useEffect, useState } from "react";
 import {
   Navbar,
@@ -11,7 +10,7 @@ import {
   Container,
 } from "react-bootstrap";
 import { BsCart3, BsGear, BsHeart, BsPencilSquare } from "react-icons/bs";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import guitarLogo from "../assets/guitar.png";
 import Footer from "./Footer";
 
@@ -32,20 +31,14 @@ export default function Layout() {
   const [navExpanded, setNavExpanded] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation(); // 🔑 detect route change
 
-  // Sync from localStorage
+  // sync cart, wishlist, user
   useEffect(() => {
-    try {
-      const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
-      const savedWishlist = JSON.parse(
-        localStorage.getItem("wishlistItems") || "[]"
-      );
-      setCart(Array.isArray(savedCart) ? savedCart : []);
-      setWishlist(Array.isArray(savedWishlist) ? savedWishlist : []);
-    } catch {
-      setCart([]);
-      setWishlist([]);
-    }
+    const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    const savedWishlist = JSON.parse(localStorage.getItem("wishlistItems") || "[]");
+    setCart(Array.isArray(savedCart) ? savedCart : []);
+    setWishlist(Array.isArray(savedWishlist) ? savedWishlist : []);
 
     const user = localStorage.getItem("loggedInUser");
     if (user) {
@@ -66,6 +59,11 @@ export default function Layout() {
     localStorage.setItem("wishlistItems", JSON.stringify(wishlist));
   }, [wishlist]);
 
+  // 🔑 Close navbar collapse when route changes
+  useEffect(() => {
+    setNavExpanded(false);
+  }, [location.pathname]);
+
   const ensureLoggedIn = (redirect = true) => {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if (!loggedInUser) {
@@ -84,7 +82,6 @@ export default function Layout() {
     setShowSidebar(false);
     navigate("/dashboard", { replace: true });
   };
-
   useEffect(() => {
     const updateCart = () => {
       const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
@@ -119,7 +116,7 @@ export default function Layout() {
         fixed="top"
         className="px-3 py-2"
         expanded={navExpanded}
-        onToggle={(expanded) => setNavExpanded(expanded)}
+        onToggle={setNavExpanded} // manage toggle state
       >
         <Container fluid>
           <Navbar.Brand
@@ -150,7 +147,10 @@ export default function Layout() {
                 variant="outline-light"
                 className="position-relative d-flex align-items-center justify-content-center"
                 style={{ width: 45, height: 45, borderRadius: "50%" }}
-                onClick={() => navigate("/wishlist")}
+                onClick={() => {
+                  navigate("/wishlist");
+                  setNavExpanded(false); // close navbar
+                }}
               >
                 <BsHeart size={18} />
                 {wishlist.length > 0 && (
@@ -167,7 +167,10 @@ export default function Layout() {
                 variant="outline-light"
                 className="position-relative d-flex align-items-center justify-content-center"
                 style={{ width: 45, height: 45, borderRadius: "50%" }}
-                onClick={() => navigate("/cart")}
+                onClick={() => {
+                  navigate("/cart");
+                  setNavExpanded(false); // close navbar
+                }}
               >
                 <BsCart3 size={18} />
                 {cart.length > 0 && (
@@ -180,7 +183,6 @@ export default function Layout() {
                   </Badge>
                 )}
               </Button>
-
               <Button
                 variant="outline-light"
                 className="d-flex align-items-center justify-content-center"
@@ -287,7 +289,6 @@ export default function Layout() {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* main content without auto padding */}
       <main className="flex-grow-1">
         <Outlet
           context={{

@@ -7,8 +7,8 @@ const Footer: React.FC = () => {
   return (
     <footer
       style={{
-        marginTop: "80px",
-        padding: "30px 0",
+        marginTop: "100px",
+        padding: "10px 0",
         backgroundColor: "#1c1c1c",
         color: "#fff",
         fontSize: "0.9rem",
@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
     >
       <Container>
         <Row className="text-md-start text-center">
-          <Col md={6} className="mb-3 mb-md-0">
-            <div className="d-flex align-items-center gap-2 justify-content-center justify-content-md-start mb-2">
+          <Col md={6} className="mb-3 mb-md-0 footer">
+            <div className="d-flex align-items-center gap-2 justify-content-center justify-content-md-start mb-4">
               <img
                 src={guitarLogo}
                 alt="GuitarVault Logo"
@@ -31,10 +31,10 @@ const Footer: React.FC = () => {
 
           <Col
             md={6}
-            className="d-flex align-items-center justify-content-center justify-content-md-end gap-4"
+            className="d-flex align-items-center justify-content-center justify-content-md-end gap-4 medsos"
           >
             <a
-              href="https://instagram.com/"
+              href="https://github.com/MuhammadDiazGirgani/"
               style={{ color: "#fff" }}
               target="_blank"
               rel="noopener noreferrer"
@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
               <BsInstagram size={20} />
             </a>
             <a
-              href="https://facebook.com/"
+              href="https://github.com/MuhammadDiazGirgani/"
               style={{ color: "#fff" }}
               target="_blank"
               rel="noopener noreferrer"
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
               <BsFacebook size={20} />
             </a>
             <a
-              href="https://twitter.com/"
+              href="https://github.com/MuhammadDiazGirgani/"
               style={{ color: "#fff" }}
               target="_blank"
               rel="noopener noreferrer"

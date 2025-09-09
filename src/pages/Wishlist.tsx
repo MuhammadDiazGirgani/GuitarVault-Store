@@ -84,7 +84,6 @@ export default function Wishlist() {
     setWishlistItems(updated);
     setWishlist(updated);
     localStorage.setItem("wishlistItems", JSON.stringify(updated));
-    toast.error("Product removed from wishlist ❌");
   };
 
   const clearWishlist = () => {

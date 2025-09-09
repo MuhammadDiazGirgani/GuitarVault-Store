@@ -96,10 +96,10 @@ const handleCopy = () => {
         </Modal.Header>
         <Modal.Body>
           <p>Please transfer to the following account:</p>
-          <div className="border p-3 rounded mb-2">
+          <div className="border p-3 rounded mb-2 text-center">
             <strong>Bank CIJ</strong> <br />
 <strong>GuitarVault Store</strong><br />
-            No. Rekening:{" "}
+            Account number:{" "}
             <span style={{ fontFamily: "monospace" }}>1234567890123456</span> <br />
           </div>
           <div className="d-flex align-items-center justify-content-between">
