@@ -109,7 +109,7 @@ export default function Login() {
 </Form>
 
           <div className="mt-3 text-center">
-            <span>Don't have an account?</span>
+            <span>Don't have an account?</span><br></br>
             <Link to="/register">Register here</Link>
           </div>
         </Card>
