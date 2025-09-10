@@ -59,7 +59,7 @@ export default function Layout() {
     localStorage.setItem("wishlistItems", JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // 🔑 Close navbar collapse when route changes
+  // Close navbar collapse when route changes
   useEffect(() => {
     setNavExpanded(false);
   }, [location.pathname]);
@@ -82,6 +82,7 @@ export default function Layout() {
     setShowSidebar(false);
     navigate("/dashboard", { replace: true });
   };
+
   useEffect(() => {
     const updateCart = () => {
       const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
@@ -107,6 +108,10 @@ export default function Layout() {
     };
   }, []);
 
+  // 🔑 total items for hamburger toggle
+  const totalItems =
+    cart.reduce((sum, item) => sum + (item.qty || 1), 0) + wishlist.length;
+
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar
@@ -116,7 +121,7 @@ export default function Layout() {
         fixed="top"
         className="px-3 py-2"
         expanded={navExpanded}
-        onToggle={setNavExpanded} // manage toggle state
+        onToggle={setNavExpanded}
       >
         <Container fluid>
           <Navbar.Brand
@@ -131,7 +136,22 @@ export default function Layout() {
             />
             <span>GuitarVault</span>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar-nav" />
+
+          {/* Hamburger toggle */}
+          <Navbar.Toggle aria-controls="navbar-nav" className="position-relative">
+            <span className="navbar-toggler-icon"></span>
+            {totalItems > 0 && (
+              <Badge
+                bg="danger"
+                pill
+                className="position-absolute top-0 start-100 translate-middle"
+                style={{ fontSize: "0.65rem" }}
+              >
+                {totalItems}
+              </Badge>
+            )}
+          </Navbar.Toggle>
+
           <Navbar.Collapse id="navbar-nav">
             <Form className="d-none d-lg-flex mx-auto w-50">
               <FormControl
@@ -149,7 +169,7 @@ export default function Layout() {
                 style={{ width: 45, height: 45, borderRadius: "50%" }}
                 onClick={() => {
                   navigate("/wishlist");
-                  setNavExpanded(false); // close navbar
+                  setNavExpanded(false);
                 }}
               >
                 <BsHeart size={18} />
@@ -169,7 +189,7 @@ export default function Layout() {
                 style={{ width: 45, height: 45, borderRadius: "50%" }}
                 onClick={() => {
                   navigate("/cart");
-                  setNavExpanded(false); // close navbar
+                  setNavExpanded(false);
                 }}
               >
                 <BsCart3 size={18} />
@@ -193,6 +213,7 @@ export default function Layout() {
               </Button>
             </div>
           </Navbar.Collapse>
+
           <Form className="d-flex d-lg-none my-2 w-100">
             <FormControl
               type="search"

@@ -17,7 +17,7 @@ import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
 import PaymentPage from "./pages/PaymentPage";
 import OrdersPage from "./pages/OrdersPage";
-
+import ScrollToTop from "./components/ScrollToTop";
 // ------------------------
 // Admin Pages
 // ------------------------
@@ -36,6 +36,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // ------------------------
 function App() {
   return (
+    <>
+               <ScrollToTop />
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" />} />
 
@@ -87,6 +89,7 @@ function App() {
       {/* Catch-all Route */}
       <Route path="*" element={<Navigate to="/dashboard" />} />
     </Routes>
+    </>
   );
 }
 
