@@ -25,8 +25,8 @@ const Footer: React.FC = () => {
               />
               <h5 className="mb-0">GuitarVault Store</h5>
             </div>
-            <p className="mb-1">© 2025 All rights reserved.</p>
-            <p className="mb-0">Email: dzgrgn@guitarvault.com</p>
+            <p className="mb-1">© 2026 All rights reserved.</p>
+            <p className="mb-0">Email: diazdgirgani93@gmail.com</p>
           </Col>
 
           <Col

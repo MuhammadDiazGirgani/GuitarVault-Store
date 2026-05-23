@@ -1,4 +1,3 @@
-// src/components/AdminNavbar.tsx
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";

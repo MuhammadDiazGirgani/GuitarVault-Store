@@ -1,4 +1,3 @@
-// src/pages/admin/AddProduct.tsx
 import { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +12,6 @@ export default function AddProduct() {
   const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState(categories[0]);
   const [description, setDescription] = useState("");
-
-  // 🔹 Tambahan field detail produk
   const [weight, setWeight] = useState("");
   const [dimensions, setDimensions] = useState("");
   const [model, setModel] = useState("");

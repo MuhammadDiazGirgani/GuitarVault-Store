@@ -40,7 +40,6 @@ interface LayoutContext {
   setCart: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
-// normalize product untuk wishlist
 const normalizeProduct = (p: RawProduct): Product => ({
   id: typeof p.id === "string" ? parseInt(p.id) : p.id,
   title: p.title,
@@ -56,7 +55,6 @@ const normalizeProduct = (p: RawProduct): Product => ({
   qty: p.qty ?? 1,
 });
 
-// normalize untuk cart (dari wishlist)
 const normalizeForCart = (p: Product): Product => ({
   ...p,
   price: Number(p.price ?? 0),
@@ -68,8 +66,6 @@ export default function Wishlist() {
   const { wishlist, setWishlist, cart, setCart } = useOutletContext<LayoutContext>();
   const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
   const navigate = useNavigate();
-
-  // ambil wishlist dari localStorage
   useEffect(() => {
     const savedWishlist = localStorage.getItem("wishlistItems");
     if (savedWishlist) {

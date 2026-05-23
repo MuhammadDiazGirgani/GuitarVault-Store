@@ -31,9 +31,8 @@ export default function Layout() {
   const [navExpanded, setNavExpanded] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation(); // 🔑 detect route change
+  const location = useLocation();
 
-  // sync cart, wishlist, user
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
     const savedWishlist = JSON.parse(localStorage.getItem("wishlistItems") || "[]");
@@ -59,7 +58,6 @@ export default function Layout() {
     localStorage.setItem("wishlistItems", JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Close navbar collapse when route changes
   useEffect(() => {
     setNavExpanded(false);
   }, [location.pathname]);
@@ -108,7 +106,6 @@ export default function Layout() {
     };
   }, []);
 
-  // 🔑 total items for hamburger toggle
   const totalItems =
     cart.reduce((sum, item) => sum + (item.qty || 1), 0) + wishlist.length;
 
@@ -136,8 +133,6 @@ export default function Layout() {
             />
             <span>GuitarVault</span>
           </Navbar.Brand>
-
-          {/* Hamburger toggle */}
           <Navbar.Toggle aria-controls="navbar-nav" className="position-relative">
             <span className="navbar-toggler-icon"></span>
             {totalItems > 0 && (

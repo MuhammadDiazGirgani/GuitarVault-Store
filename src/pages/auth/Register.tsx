@@ -16,8 +16,6 @@ export default function RegisterPage() {
     }
 
     const newUser = { username, email, password };
-
-    // simpan ke localStorage (array users)
     const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
     existingUsers.push(newUser);
     localStorage.setItem("users", JSON.stringify(existingUsers));

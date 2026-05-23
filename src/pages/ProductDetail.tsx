@@ -1,4 +1,3 @@
-// src/pages/ProductDetail.tsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
@@ -56,12 +55,24 @@ interface RawProduct {
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
+
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const isLoggedIn = !!localStorage.getItem("loggedInUser");
+  const isWeekend = () => {
+    const day = new Date().getDay();
+    return day === 0 || day === 6;
+  };
+
+  const discountedPrice = (price: number) => {
+    return Math.round(price * 0.8);
+  };
+
+  const weekendSale = isWeekend();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -70,29 +81,30 @@ export default function ProductDetail() {
       try {
         setLoading(true);
         setError(null);
-
-        // 🔸 Fetch dari GitHub JSON
         const res = await fetch(
           "https://muhammaddiazgirgani.github.io/api-json/guitars.json"
         );
+
         if (!res.ok) throw new Error("Gagal fetch data API");
 
         const data: RawProduct[] = await res.json();
-
-        // 🔸 Normalisasi data JSON
         const jsonProducts: Product[] = data.map((p: RawProduct) => ({
           id: Number(p.id),
           title: p.title ?? "No Title",
           description: p.description ?? "No description",
+
           category:
             typeof p.category === "object"
               ? p.category
               : { name: p.category ?? "Uncategorized" },
+
           images: Array.isArray(p.images)
             ? p.images
             : [p.image || "/images/no-image.png"],
+
           price_usd: p.price_usd ?? 0,
           price_idr: p.price_idr ?? 0,
+
           weight: p.weight,
           dimensions: p.dimensions,
           model: p.model,
@@ -100,30 +112,36 @@ export default function ProductDetail() {
           color: p.color,
           materials: p.materials,
         }));
-
-        // 🔸 Ambil dari localStorage
-        const storedCustom = JSON.parse(localStorage.getItem("customProducts") || "[]");
-        const editedProducts = JSON.parse(localStorage.getItem("editedProducts") || "[]");
-        const deletedIds: number[] = JSON.parse(localStorage.getItem("deletedProducts") || "[]");
-
-        // 🔸 Filter produk yang dihapus
-        const filteredJson = jsonProducts.filter((p) => !deletedIds.includes(p.id));
-
-        // 🔸 Replace dengan produk hasil edit
+        const storedCustom = JSON.parse(
+          localStorage.getItem("customProducts") || "[]"
+        );
+        const editedProducts = JSON.parse(
+          localStorage.getItem("editedProducts") || "[]"
+        );
+        const deletedIds: number[] = JSON.parse(
+          localStorage.getItem("deletedProducts") || "[]"
+        );
+        const filteredJson = jsonProducts.filter(
+          (p) => !deletedIds.includes(p.id)
+        );
         const mergedProducts = filteredJson.map((p) => {
-          const edited = editedProducts.find((e: Product) => e.id === p.id);
+          const edited = editedProducts.find(
+            (e: Product) => e.id === p.id
+          );
+
           return edited ? edited : p;
         });
-
-        // 🔸 Gabungkan dengan produk custom
         const combined = [...storedCustom, ...mergedProducts];
-
-        // 🔎 Cari produk berdasarkan ID
         const found = combined.find((p) => String(p.id) === id);
+
         setProduct(found || null);
       } catch (err) {
-        if (err instanceof Error) setError(err.message);
-        else setError("Terjadi kesalahan yang tidak diketahui");
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Terjadi kesalahan yang tidak diketahui");
+        }
+
         setProduct(null);
       } finally {
         setLoading(false);
@@ -134,36 +152,72 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddToCart = () => {
-  if (!isLoggedIn) { navigate("/login"); return; }
-  if (!product) return;
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
 
-  const storedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
-  const existing = storedCart.find((item: Product) => item.id === product.id);
+    if (!product) return;
 
-  let updated;
-  if (existing) {
-    existing.qty = (existing.qty || 1) + 1;
-    updated = storedCart.map((item: Product) => (item.id === product.id ? existing : item));
-  } else {
-    updated = [...storedCart, { ...product, qty: 1 }];
-  }
+    const storedCart = JSON.parse(
+      localStorage.getItem("cartItems") || "[]"
+    );
 
-  localStorage.setItem("cartItems", JSON.stringify(updated));
+    const existing = storedCart.find(
+      (item: Product) => item.id === product.id
+    );
 
-  // Trigger navbar update
-  window.dispatchEvent(new Event("storage"));
-};
+    const finalPrice = weekendSale
+      ? discountedPrice(product.price_usd)
+      : product.price_usd;
 
+    let updated;
+
+    if (existing) {
+      existing.qty = (existing.qty || 1) + 1;
+
+      updated = storedCart.map((item: Product) =>
+        item.id === product.id ? existing : item
+      );
+    } else {
+      updated = [
+        ...storedCart,
+        {
+          ...product,
+          price_usd: finalPrice,
+          qty: 1,
+        },
+      ];
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(updated));
+    window.dispatchEvent(new Event("storage"));
+  };
   const handleBuyNow = () => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
+
     if (!product) return;
-    localStorage.setItem("cartItems", JSON.stringify([{ ...product, qty: 1 }]));
+
+    const finalPrice = weekendSale
+      ? discountedPrice(product.price_usd)
+      : product.price_usd;
+
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify([
+        {
+          ...product,
+          price_usd: finalPrice,
+          qty: 1,
+        },
+      ])
+    );
+
     navigate("/checkout");
   };
-
   if (loading) {
     return (
       <div
@@ -176,7 +230,11 @@ export default function ProductDetail() {
   }
 
   if (error || !product) {
-    return <h3 className="text-center mt-5">❌ Product not found</h3>;
+    return (
+      <h3 className="text-center mt-5">
+        ❌ Product not found
+      </h3>
+    );
   }
 
   return (
@@ -191,61 +249,167 @@ export default function ProductDetail() {
         </Col>
         <Col md={6}>
           <h2>{product.title}</h2>
-          <h4 className="text-muted">${product.price_usd}</h4>
-          <p><strong>Category:</strong> {product.category.name}</p>
-          {product.weight && <p><strong>Weight:</strong> {product.weight}</p>}
-          {product.dimensions && <p><strong>Dimensions:</strong> {product.dimensions}</p>}
-          {product.model && <p><strong>Model:</strong> {product.model}</p>}
-          {product.strings && <p><strong>Strings:</strong> {product.strings}</p>}
-          {product.color && <p><strong>Color:</strong> {product.color}</p>}
+          {weekendSale ? (
+            <div className="mb-3">
+              <div className="d-flex align-items-center gap-3">
+
+                <span
+                  style={{
+                    textDecoration: "line-through",
+                    color: "#888",
+                    fontSize: "20px",
+                  }}
+                >
+                  ${product.price_usd}
+                </span>
+                <span
+                  style={{
+                    color: "#ff4d4f",
+                    fontWeight: "bold",
+                    fontSize: "32px",
+                  }}
+                >
+                  ${discountedPrice(product.price_usd)}
+                </span>
+              </div>
+              <div
+                style={{
+                  marginTop: "10px",
+                  background: "#ff4d4f",
+                  color: "white",
+                  padding: "6px 12px",
+                  borderRadius: "10px",
+                  width: "fit-content",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  boxShadow: "0 0 15px rgba(255,77,79,0.35)",
+                }}
+              >
+                WEEKEND SALE 20% OFF
+              </div>
+
+              <small className="text-muted d-block mt-2">
+                Weekend promotion ends Sunday midnight
+              </small>
+            </div>
+          ) : (
+            <h4 className="text-muted">
+              ${product.price_usd}
+            </h4>
+          )}
+
+          <p>
+            <strong>Category:</strong>{" "}
+            {product.category.name}
+          </p>
+
+          {product.weight && (
+            <p>
+              <strong>Weight:</strong> {product.weight}
+            </p>
+          )}
+
+          {product.dimensions && (
+            <p>
+              <strong>Dimensions:</strong>{" "}
+              {product.dimensions}
+            </p>
+          )}
+
+          {product.model && (
+            <p>
+              <strong>Model:</strong> {product.model}
+            </p>
+          )}
+
+          {product.strings && (
+            <p>
+              <strong>Strings:</strong> {product.strings}
+            </p>
+          )}
+
+          {product.color && (
+            <p>
+              <strong>Color:</strong> {product.color}
+            </p>
+          )}
+
           {product.materials && (
             <div>
               <strong>Materials:</strong>
+
               <ul>
-                {product.materials.body && <li>Body: {product.materials.body}</li>}
-                {product.materials.back && <li>Back: {product.materials.back}</li>}
-                {product.materials.top && <li>Top: {product.materials.top}</li>}
-                {product.materials.fretboard && <li>Fretboard: {product.materials.fretboard}</li>}
-                {product.materials.neck && <li>Neck: {product.materials.neck}</li>}
-                {product.materials.strings && <li>Strings: {product.materials.strings}</li>}
+                {product.materials.body && (
+                  <li>
+                    Body: {product.materials.body}
+                  </li>
+                )}
+
+                {product.materials.back && (
+                  <li>
+                    Back: {product.materials.back}
+                  </li>
+                )}
+
+                {product.materials.top && (
+                  <li>
+                    Top: {product.materials.top}
+                  </li>
+                )}
+
+                {product.materials.fretboard && (
+                  <li>
+                    Fretboard:{" "}
+                    {product.materials.fretboard}
+                  </li>
+                )}
+
+                {product.materials.neck && (
+                  <li>
+                    Neck: {product.materials.neck}
+                  </li>
+                )}
+
+                {product.materials.strings && (
+                  <li>
+                    Strings: {product.materials.strings}
+                  </li>
+                )}
               </ul>
             </div>
           )}
-
         </Col>
-        {/* Button bar */}
-      <div className="d-flex justify-content-between mt-4 mb-5 align-items-center">
-        {/* Kiri: Back */}
-        <div>
-          <Button
-            variant="outline-dark"
-            onClick={() => navigate("/dashboard")}
-            className="btn-detail"
-          >
-            ← Back to Shop
-          </Button>
-        </div>
+        <div className="d-flex justify-content-between mt-4 mb-5 align-items-center">
+          <div>
+            <Button
+              variant="outline-dark"
+              onClick={() => navigate("/dashboard")}
+              className="btn-detail"
+            >
+              ← Back to Shop
+            </Button>
+          </div>
+          <div className="d-flex gap-2 align-items-center">
 
-        {/* Kanan: Add to Cart + Buy Now */}
-        <div className="d-flex gap-2 align-items-center">
-          <Button
-            variant="dark"
-            onClick={handleAddToCart}
-            className="btn-detail"
-          >
-            Add to Cart
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleBuyNow}
-            className="btn-detail"
-          >
-            Buy Now
-          </Button>
+            <Button
+              variant="dark"
+              onClick={handleAddToCart}
+              className="btn-detail"
+            >
+              Add to Cart
+            </Button>
+
+            <Button
+              variant="secondary"
+              onClick={handleBuyNow}
+              className="btn-detail"
+            >
+              Buy Now
+            </Button>
+
+          </div>
         </div>
-      </div>
       </Row>
-
     </Container>
   );
 }

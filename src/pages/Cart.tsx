@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 interface Product {
   id: number;
   title: string;
-  price: number; // gunakan price sebagai standar
+  price: number;
   description?: string;
   images: string[];
   category?: {
@@ -73,7 +73,6 @@ useEffect(() => {
     setCartItems(normalized);
   }
 }, [cart]);
-
 
   const updateCart = (updated: Product[]) => {
     setCartItems(updated);

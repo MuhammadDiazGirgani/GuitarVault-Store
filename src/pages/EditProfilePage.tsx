@@ -6,7 +6,7 @@ interface User {
   username: string;
   email: string;
   password: string;
-  address?: string; // ✅ tambahin address
+  address?: string;
 }
 
 export default function EditProfilePage() {
@@ -31,8 +31,6 @@ export default function EditProfilePage() {
 
   const handleSave = () => {
     localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-    // Update di daftar users juga
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const updatedUsers = users.map((u: User) =>
       u.email === user.email ? user : u

@@ -1,4 +1,3 @@
-// src/components/ProductCard.tsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +5,12 @@ import toast from "react-hot-toast";
 import type { Product } from "../types";
 
 interface ProductCardProps {
-  product: Product;
+  product: Product & {
+    original_price?: number;
+    discounted_price?: number;
+    is_weekend_sale?: boolean;
+  };
+
   onAddToCart: (product: Product) => void;
   onAddToWishlist: (product: Product) => void;
   ensureLoggedIn: () => boolean;
@@ -25,15 +29,20 @@ export default function ProductCard({
 
   const handleAddToCart = () => {
     if (!ensureLoggedIn()) return;
+
     setAnimate(true);
     onAddToCart(product);
+
     setTimeout(() => setAnimate(false), 800);
   };
 
   const handleBuyNow = () => {
     if (!ensureLoggedIn()) return;
+
     onAddToCart(product);
+
     toast.success(`Quick checkout for ${product.title} 🛍️`);
+
     navigate("/cart");
   };
 
@@ -43,11 +52,12 @@ export default function ProductCard({
 
   const handleAddToWishlist = () => {
     if (!ensureLoggedIn()) return;
+
     onAddToWishlist(product);
   };
 
   return (
-    <div className="card p-2 shadow-sm position-relative">
+    <div className="card p-2 shadow-sm position-relative h-100">
       <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={handleAddToWishlist}
@@ -59,6 +69,7 @@ export default function ProductCard({
           width: 36,
           height: 36,
           padding: 0,
+          zIndex: 10,
         }}
       >
         <motion.i
@@ -73,29 +84,90 @@ export default function ProductCard({
           }}
         />
       </motion.button>
-
       <img
-        src={product.image && product.image !== "" ? product.image : "/images/placeholder.png"}
+        src={
+          product.image && product.image !== ""
+            ? product.image
+            : "/images/placeholder.png"
+        }
         alt={product.title}
         className="card-img-top rounded"
-        style={{ height: 125, objectFit: "cover", cursor: "pointer" }}
+        style={{
+          height: 125,
+          objectFit: "cover",
+          cursor: "pointer",
+        }}
         onClick={goToDetail}
         onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = "/images/placeholder.png";
+          (e.currentTarget as HTMLImageElement).src =
+            "/images/placeholder.png";
         }}
       />
-
       <div className="card-body d-flex flex-column">
-        <h6 className="card-title" style={{ cursor: "pointer" }} onClick={goToDetail}>
+        <h6
+          className="card-title"
+          style={{ cursor: "pointer" }}
+          onClick={goToDetail}
+        >
           {product.title}
         </h6>
 
-        <p className="fw-bold mb-1">${Number(product.price_usd || 0).toLocaleString()}</p>
-        <small className="text-muted mb-3">
-          IDR {Number(product.price_idr || 0).toLocaleString()}
-        </small>
+        {product.is_weekend_sale ? (
+          <div className="mb-2">
+            <div
+              style={{
+                textDecoration: "line-through",
+                color: "#888",
+                fontSize: "14px",
+              }}
+            >
+              $
+              {Number(
+                product.original_price || product.price_usd
+              ).toLocaleString()}
+            </div>
+            <div
+              style={{
+                color: "#ff4d4f",
+                fontWeight: "bold",
+                fontSize: "24px",
+                lineHeight: 1.2,
+              }}
+            >
+              $
+              {Number(
+                product.discounted_price || product.price_usd
+              ).toLocaleString()}
+            </div>
+            <div
+              style={{
+                marginTop: "6px",
+                background: "#ff4d4f",
+                color: "white",
+                padding: "4px 10px",
+                borderRadius: "8px",
+                display: "inline-block",
+                fontSize: "12px",
+                fontWeight: "600",
+              }}
+            >
+              WEEKEND SALE 20% OFF
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="fw-bold mb-1">
+              $
+              {Number(product.price_usd || 0).toLocaleString()}
+            </p>
 
+            <small className="text-muted mb-3">
+              IDR {Number(product.price_idr || 0).toLocaleString()}
+            </small>
+          </>
+        )}
         <div className="d-flex flex-column flex-md-row gap-2 mt-auto">
+          
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={handleAddToCart}
@@ -111,16 +183,30 @@ export default function ProductCard({
           >
             Buy Now
           </motion.button>
+
         </div>
       </div>
-
       <AnimatePresence>
         {animate && (
           <motion.div
-            initial={{ opacity: 1, scale: 1, y: 0 }}
-            animate={{ opacity: 0, scale: 0.2, y: -150, x: 150 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            initial={{
+              opacity: 1,
+              scale: 1,
+              y: 0,
+            }}
+            animate={{
+              opacity: 0,
+              scale: 0.2,
+              y: -150,
+              x: 150,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.8,
+              ease: "easeInOut",
+            }}
             className="position-absolute bg-dark rounded-circle"
             style={{
               width: 30,

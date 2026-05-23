@@ -5,8 +5,16 @@ import { useNavigate } from "react-router-dom";
 interface OrderItem {
   id: number;
   title: string;
-  price: number;
+
+  price?: number;
+  price_usd?: number;
+
+  original_price?: number;
+  discounted_price?: number;
+  is_weekend_sale?: boolean;
+
   images: string[];
+
   qty?: number;
 }
 
@@ -21,7 +29,11 @@ interface Order {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const navigate = useNavigate();
-
+const getFinalPrice = (item: OrderItem) => {
+  return item.is_weekend_sale
+    ? item.discounted_price ?? item.price_usd ?? item.price ?? 0
+    : item.price_usd ?? item.price ?? 0;
+};
   useEffect(() => {
     const savedOrders = localStorage.getItem("orders");
     if (savedOrders) {
@@ -53,7 +65,16 @@ export default function OrdersPage() {
               <p><strong>Date:</strong> {new Date(order.date).toLocaleString()}</p>
               <p><strong>Status:</strong> {order.status}</p>
               <p><strong>Payment:</strong> {order.payment}</p>
-              <p><strong>Total:</strong> ${order.total}</p>
+              <p>
+  <strong>Total:</strong> $
+  {order.items
+    .reduce(
+      (sum, item) =>
+        sum + getFinalPrice(item) * (item.qty || 1),
+      0
+    )
+    .toFixed(2)}
+</p>
             </Col>
           </Row>
           <Row>
@@ -66,9 +87,58 @@ export default function OrdersPage() {
                   />
                   <Card.Body >
                     <Card.Title className="ordertext">{item.title}</Card.Title>
-                    <Card.Text className="ordertext">
-                      ${item.price} × {item.qty || 1}
-                    </Card.Text>
+<Card.Text className="ordertext">
+
+  {item.is_weekend_sale ? (
+    <>
+      {/* ORIGINAL PRICE */}
+      <div
+        style={{
+          textDecoration: "line-through",
+          color: "#888",
+          fontSize: "12px",
+        }}
+      >
+        ${item.original_price}
+      </div>
+
+      {/* DISCOUNT PRICE */}
+      <div
+        style={{
+          color: "#ff4d4f",
+          fontWeight: "bold",
+          fontSize: "18px",
+        }}
+      >
+        ${item.discounted_price}
+      </div>
+
+      {/* BADGE */}
+      <div
+        style={{
+          background: "#ff4d4f",
+          color: "white",
+          display: "inline-block",
+          padding: "2px 6px",
+          borderRadius: "6px",
+          fontSize: "10px",
+          marginBottom: "4px",
+        }}
+      >
+        WEEKEND SALE
+      </div>
+
+      <div>
+        ${item.discounted_price} × {item.qty || 1}
+      </div>
+    </>
+  ) : (
+    <>
+      ${getFinalPrice(item)} × {item.qty || 1}
+    </>
+  )}
+
+</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>

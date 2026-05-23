@@ -1,5 +1,5 @@
 export interface Product {
-  id: number;  // langsung number
+  id: number;  
   title: string;
   category: string;
   price_usd: number;
@@ -12,6 +12,9 @@ export interface Product {
   color?: string;
   materials?: string;
   qty?: number;
+  original_price?: number;
+discounted_price?: number;
+is_weekend_sale?: boolean;
 }
 
 export interface RawProduct {
@@ -39,7 +42,6 @@ export interface CartItem {
   price_usd: number;
   price_idr?: number;
   qty?: number;
-  // legacy kompatibilitas
   price?: number;
   quantity?: number;
 }

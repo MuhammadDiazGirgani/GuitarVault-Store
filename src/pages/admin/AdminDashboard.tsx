@@ -1,4 +1,3 @@
-// src/pages/admin/AdminDashboard.tsx
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -39,7 +38,6 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔐 Cek login & admin
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (!storedUser) {
@@ -52,7 +50,6 @@ export default function AdminDashboard() {
     }
   }, [navigate]);
 
-  // 📦 Fetch produk dari GitHub + merge localStorage
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -117,7 +114,6 @@ export default function AdminDashboard() {
     fetchProducts();
   }, []);
 
-  // 🗑 Hapus produk
   const handleDelete = (id: number, isCustom?: boolean) => {
     if (!isCustom) {
       alert("GitHub products cannot be deleted!");

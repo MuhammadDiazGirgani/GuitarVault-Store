@@ -1,4 +1,3 @@
-// src/pages/admin/EditProductPage.tsx
 import { useEffect, useState } from "react";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
@@ -48,8 +47,6 @@ export default function EditProductPage() {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState<Product | null>(null);
-
-  // Form state
   const [title, setTitle] = useState("");
   const [priceUsd, setPriceUsd] = useState(0);
   const [priceIdr, setPriceIdr] = useState(0);
@@ -72,7 +69,6 @@ export default function EditProductPage() {
 
   const [loading, setLoading] = useState(true);
 
-  // Fetch data
   useEffect(() => {
     const fetchProducts = async () => {
       try {
